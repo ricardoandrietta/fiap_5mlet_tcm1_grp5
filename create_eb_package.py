@@ -1,6 +1,42 @@
 #!/usr/bin/env python3
 """
 Script para criar pacote ZIP para deploy no AWS Elastic Beanstalk
+
+COMO USAR:
+==========
+
+1. Para gerar um novo pacote de deploy:
+   python create_eb_package.py
+
+2. O script irá:
+   - Incrementar automaticamente a versão (patch)
+   - Criar um arquivo ZIP com timestamp
+   - Incluir apenas os arquivos necessários para produção
+   - Gerar documentação de deploy (DEPLOY_README.md)
+
+3. Arquivo gerado:
+   flask-webscraping-api-v{versao}-{timestamp}.zip
+
+4. Para fazer deploy:
+   - Acesse AWS Elastic Beanstalk Console
+   - Faça upload do arquivo ZIP gerado
+   - Configure variáveis de ambiente conforme DEPLOY_README.md
+
+EXEMPLO:
+========
+$ python create_eb_package.py
+📈 Incrementando versão...
+✅ Nova versão: 1.1.4
+📦 Criando pacote: flask-webscraping-api-v1.1.4-20250525-220000.zip
+✅ Pacote criado com sucesso!
+
+ARQUIVOS INCLUÍDOS:
+==================
+- application.py (ponto de entrada EB)
+- app.py (aplicação Flask)
+- requirements.txt (dependências)
+- cache/ (sistema de cache)
+- .ebextensions/ (configurações EB)
 """
 
 import os
@@ -181,7 +217,7 @@ def create_readme_for_deployment():
 ```
 FLASK_ENV=production
 SHORT_CACHE_TTL=300
-FALLBACK_CACHE_TTL=86400
+FALLBACK_CACHE_TTL=2592000
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_DB=0
